@@ -7,9 +7,8 @@ const HeroWrapper = styled("div")`
   display: flex;
   flex-direction: row;
   width: 100%;
+  justify-content: space-evenly;
 `;
-
-const HeroText = styled("div")``;
 
 const Title = styled("h1")`
   font-size: 4vh;
@@ -25,7 +24,12 @@ const Subtitle = styled("h2")`
   font-size: 1.2rem;
 `;
 
+const HeroImageWrapper = styled("div")`
+  width: 40vw;
+`;
+
 const Hero = () => {
+  //get hero image
   const data = useStaticQuery(graphql`
     query {
       file(name: { eq: "bbbGlobe" }, extension: { eq: "png" }) {
@@ -37,10 +41,10 @@ const Hero = () => {
       }
     }
   `);
-  console.log(data);
+
   return (
     <HeroWrapper>
-      <HeroText>
+      <div>
         <Title>
           Changing
           <TitleAccent> the </TitleAccent>
@@ -50,8 +54,11 @@ const Hero = () => {
           Bit
         </Title>
         <Subtitle>Invest and donate to charity simultaneously.</Subtitle>
-      </HeroText>
-      <Img fluid={data.file.childImageSharp.fluid} alt="Globe animation" />
+        <button>Buy now</button>
+      </div>
+      <HeroImageWrapper>
+        <Img fluid={data.file.childImageSharp.fluid} alt="Globe animation" />
+      </HeroImageWrapper>
     </HeroWrapper>
   );
 };

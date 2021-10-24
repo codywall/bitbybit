@@ -1,13 +1,26 @@
 import React from "react";
 import Header from "../components/Navbar/Navbar";
 import Hero from "../components/Hero";
+import About from "../components/About";
+import styled from "@emotion/styled";
+import {
+  BscConnector,
+  UserRejectedRequestError,
+} from "@binance-chain/bsc-connector";
+import {
+  ConnectionRejectedError,
+  useWallet,
+  UseWalletProvider,
+} from "use-wallet";
 
 // styles
 const pageStyles = {
   backgroundColor: "black",
+  margin: 0,
+  maxWidth: "100%",
+  minHeight: "100wh",
   color: "white",
-  padding: 96,
-  fontFamily: "-apple-system, Roboto, sans-serif, serif",
+  fontFamily: "Roboto, sans-serif",
 };
 
 const paragraphStyles = {
@@ -74,14 +87,37 @@ const badgeStyle = {
   lineHeight: 1,
 };
 
+const PageWrapper = styled("div")`
+  max-width: 750px;
+  margin: 0 auto;
+`;
+
 // markup
 const IndexPage = () => {
   return (
-    <main style={pageStyles}>
-      <title>BitByBit</title>
-      <Header />
-      <Hero />
-    </main>
+    <UseWalletProvider
+      connectors={{
+        bsc: {
+          web3ReactConnector() {
+            return new BscConnector({ supportedChainIds: [56, 97] });
+          },
+          handleActivationError(err) {
+            if (err instanceof UserRejectedRequestError) {
+              return new ConnectionRejectedError();
+            }
+          },
+        },
+      }}
+    >
+      <main style={pageStyles}>
+        <PageWrapper>
+          <title>BitByBit</title>
+          <Header />
+          <Hero />
+          <About />
+        </PageWrapper>
+      </main>
+    </UseWalletProvider>
   );
 };
 

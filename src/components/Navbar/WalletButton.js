@@ -1,5 +1,13 @@
-// Logo.js
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  BscConnector,
+  UserRejectedRequestError,
+} from "@binance-chain/bsc-connector";
+import {
+  ConnectionRejectedError,
+  useWallet,
+  UseWalletProvider,
+} from "use-wallet";
 import styled from "@emotion/styled";
 
 const Button = styled("button")`
@@ -13,7 +21,19 @@ const Button = styled("button")`
 `;
 
 const WalletButton = () => {
-  return <Button>Connect Wallet</Button>;
+  const { account, connect, reset, status } = useWallet();
+  console.log("status: " + status);
+  console.log("account" + account);
+  return (
+    <>
+      {status === "disconnected" ? (
+        <Button onClick={() => connect("bsc")}>Connect</Button>
+      ) : (
+        <Button onClick={() => reset()}>Disconnect</Button>
+      )}
+      {account && <p>Connected as {account}</p>}
+    </>
+  );
 };
 
 export default WalletButton;
